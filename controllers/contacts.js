@@ -38,7 +38,7 @@ const deleteById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   const { contactId } = req.params;
-  console.log(contactId);
+  
   const result = await contacts.updateContact(contactId, req.body);
 
   if (!result) {
