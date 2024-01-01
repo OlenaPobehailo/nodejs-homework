@@ -20,6 +20,10 @@ const createContactSchema = Joi.object({
       "string.pattern.base": "Invalid phone number format.",
       "any.required": "Phone number is required.",
     }),
+
+  favorite: Joi.boolean().required().messages({
+    "any.required": "Favorite status is required.",
+  }),
 });
 
 module.exports = {
