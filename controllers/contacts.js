@@ -2,6 +2,7 @@ const { Contact } = require("../models/contact");
 
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
+const { contactSchemas } = require("../validators");
 
 const getAll = async (req, res, next) => {
   const result = await Contact.find();
@@ -51,10 +52,33 @@ const updateById = async (req, res, next) => {
   res.json(result);
 };
 
+const updateStatusContact = async (contactId, favorite) => {
+  return await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    {
+      new: true,
+    }
+  );
+};
+
+const updateFavorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  const result = await updateStatusContact(contactId, favorite);
+
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   createContact: ctrlWrapper(createContact),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
