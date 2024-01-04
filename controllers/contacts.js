@@ -3,7 +3,16 @@ const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
 
 const getAll = async (req, res, next) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner, favorite: favorite === "true" };
+
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email subscription");
 
   res.json(result);
 };
@@ -20,7 +29,8 @@ const getById = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -50,17 +60,17 @@ const updateById = async (req, res, next) => {
   res.json(result);
 };
 
-const updateStatusContact = async (contactId, favorite) => {
-  return await Contact.findByIdAndUpdate(
-    contactId,
-    { favorite },
-    {
-      new: true,
-    }
-  );
-};
-
 const updateFavorite = async (req, res, next) => {
+  const updateStatusContact = async (contactId, favorite) => {
+    return await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      {
+        new: true,
+      }
+    );
+  };
+
   const { contactId } = req.params;
   const { favorite } = req.body;
 
