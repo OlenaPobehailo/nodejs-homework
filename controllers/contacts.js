@@ -50,17 +50,20 @@ const updateById = async (req, res, next) => {
   res.json(result);
 };
 
-const updateStatusContact = async (contactId, favorite) => {
-  return await Contact.findByIdAndUpdate(
-    contactId,
-    { favorite },
-    {
-      new: true,
-    }
-  );
-};
+
 
 const updateFavorite = async (req, res, next) => {
+
+  const updateStatusContact = async (contactId, favorite) => {
+    return await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      {
+        new: true,
+      }
+    );
+  };
+  
   const { contactId } = req.params;
   const { favorite } = req.body;
 
