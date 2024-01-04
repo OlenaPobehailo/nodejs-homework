@@ -3,6 +3,7 @@ const express = require("express");
 const authController = require("../../controllers/auth");
 const { validateBody } = require("../../decorators");
 const { authSchemas } = require("../../validators");
+const { authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -13,9 +14,11 @@ router.post(
 );
 
 router.post(
-    "/login",
-    validateBody(authSchemas.loginSchema),
-    authController.login
-  );
+  "/login",
+  validateBody(authSchemas.loginSchema),
+  authController.login
+);
+
+router.get("/current", authenticate, authController.getCurrent);
 
 module.exports = router;
