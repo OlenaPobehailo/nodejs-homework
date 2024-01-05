@@ -21,13 +21,16 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+    },
   },
   {
     versionKey: false,
-    timestamps: true, 
+    timestamps: true,
   }
 );
- 
+
 userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
