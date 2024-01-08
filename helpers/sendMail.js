@@ -3,29 +3,31 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const config = {
-  host: "smtp.meta.ua",
-  port: 465,
-  secure: true,
+  host: "smtp.gmail.com",
   auth: {
-    user: process.env.META_User,
-    pass: process.env.META_PASSWORD,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASSWORD,
   },
 };
 
 const transporter = nodemailer.createTransport(config);
 
-const sendEmail = (data) => {
-  const emailOptions = {
-    ...data,
-    from: process.env.META_User,
-  };
+const sendEmail = async (data) => {
+  try {
+    const emailOptions = {
+      ...data,
+      from: process.env.GMAIL_USER,
+    };
 
-  transporter
-    .sendMail(emailOptions)
-    .then((info) => console.log(info))
-    .catch((err) => console.log(err));
+    console.log("emailOptions.from", emailOptions.from);
 
-  return true;
+    const info = await transporter.sendMail(emailOptions);
+    console.log(info);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 // sendEmail({
@@ -35,4 +37,3 @@ const sendEmail = (data) => {
 // });
 
 module.exports = sendEmail;
-
