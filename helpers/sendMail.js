@@ -29,7 +29,7 @@ const sendEmail = (data) => {
 };
 
 // sendEmail({
-//   to: "wihonov643@telvetto.com",
+//   to: "xisoye7326@tanlanav.com",
 //   subject: "Nodemailer test",
 //   text: "Привіт. Ми тестуємо надсилання листів!",
 // });
