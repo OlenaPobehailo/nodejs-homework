@@ -16,6 +16,12 @@ router.post(
 router.get("/verify/:verificationToken", authController.verifyEmail);
 
 router.post(
+  "/verify",
+  validateBody(authSchemas.verifySchema),
+  authController.resendVerifyEmail
+);
+
+router.post(
   "/login",
   validateBody(authSchemas.loginSchema),
   authController.login
